@@ -101,6 +101,7 @@ describe('urlutil', function () {
       it('has custom protocol', function () {
         assert.equal(urlUtil.isNotURL('brave://test'), false)
       })
+
     })
 
     describe('returns true when input:', function () {
@@ -164,6 +165,12 @@ describe('urlutil', function () {
     it('calls prependScheme', function () {
       assert.equal(urlUtil.getUrlFromInput('/file/path/to/file'), 'file:///file/path/to/file')
     })
+    it('search for a file with a space', function () {
+      assert.equal(urlUtil.getUrlFromInput('/file/path/to/dog cat'), 'file:///file/path/to/dog%20cat')
+    })
+    it('make a google search with a space', function () {
+      assert.equal(urlUtil.getUrlFromInput(' https://www.google.ca/search?q=dog cat '), 'https://www.google.ca/search?q=dog%20cat')
+    })
   })
 
   describe('isURL', function () {
@@ -175,6 +182,7 @@ describe('urlutil', function () {
   })
 
   describe('isFileType', function () {
+
     it('relative file', function () {
       assert.equal(urlUtil.isFileType('/file/abc/test.pdf', 'pdf'), true)
     })
