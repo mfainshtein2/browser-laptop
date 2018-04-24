@@ -19,6 +19,7 @@ const Immutable = require('immutable')
 const app = electron.app
 const compareVersions = require('compare-versions')
 const merge = require('deepmerge')
+const si = require('systeminformation')
 
 // Constants
 const UpdateStatus = require('../js/constants/updateStatus')
@@ -536,6 +537,25 @@ const safeGetVersion = (fieldName, getFieldVersion) => {
  * version information (shown on about:brave)
  */
 const setVersionInformation = (immutableData) => {
+
+
+  var resolutionx;
+    var resolutiony;
+
+    si.graphics()
+        .then(data => data.displays[0].resolutionx)
+        .catch(error => console.error(error));
+    si.graphics()
+        .then(data => data.displays[0].resolutiony)
+        .catch(error => console.error(error));
+
+    var resolution = resolutionx + " x "+ resolutiony;
+        //si.graphics.displays[0].resolutionx+" x "+si.graphics.displays[0].resolutiony;
+
+    //var graphicBoard = si.graphics.board;
+    var graphicDriver = "placeholder";
+        //si.graphics;
+
   const versionFields = [
     ['Brave', app.getVersion],
     ['rev', BuildConfig.browserLaptopRev],
@@ -543,9 +563,13 @@ const setVersionInformation = (immutableData) => {
     ['libchromiumcontent', () => { return process.versions['chrome'] }],
     ['V8', () => { return process.versions.v8 }],
     ['Node.js', () => { return process.versions.node }],
+    ['Graphic board name' , () => { return graphicDriver }],
+    ['Graphic board driver', () => { return graphicDriver }],
+    ['Monitor resolution', () => { return resolution }],
     ['Update Channel', Channel.formattedChannel],
     ['OS Platform', () => platformUtil.formatOsPlatform(os.platform())],
     ['OS Release', os.release],
+    ['OS Version', os.type],
     ['OS Architecture', os.arch]
   ]
   const versionInformation = {}
